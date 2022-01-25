@@ -1,6 +1,6 @@
 class NumberConverter {
-    constructor(number){
-        this._number = number;
+    constructor(){
+        this._number = "";
     }
 
     get number() {
@@ -8,9 +8,11 @@ class NumberConverter {
     }
 
     set convertNumberToString(number) {
+        this._number = "";
+        const numberArray = number.toString().split("");
         
-        const unitDecimal  = (number) => {
-            let result = "";
+        const classifyNumber  = (number) => {
+            let stringNumber = "";
             const list = [
                 {1: "One"},
                 {2: "Two"},
@@ -20,64 +22,49 @@ class NumberConverter {
                 {6: "Six"},
                 {7: "Seven"},
                 {8: "Eight"},
-                {9: "Nine"},
-                {10: "Ten"},
-                {11: "Eleven"},
-                {12: "Twelve"},
-                {13: "Thirteen"},
-                {14: "Fourteen"},
-                {15: "Fifteen"},
-                {16: "Sixteen"},
-                {17: "Seventeen"},
-                {18: "Eighteen"},
-                {19: "Nineteen"},           
+                {9: "Nine"},       
             ];
 
             list.forEach((unit)=>{
                 if(unit[number]){
-                    result = unit[number];
+                    stringNumber = unit[number];
                 }
             });
-            return result;
+            return stringNumber;
         };
 
-        const composedNumbers = (number) => {
-            let result = "";
+        const classifyNumberPosition = (numLength) => {
 
             const list = [
-                {20: "Twenty"},
-                {30: "Thirty"},
-                {40: "Forty"},
-                {50: "Fifty"},
-                {60: "Sixty"},
-                {70: "Seventy"},
-                {80: "Eighty"},
-                {90: "Ninety"}, 
+                // {20: "Twenty"},
+                // {30: "Thirty"},
+                // {40: "Forty"},
+                // {50: "Fifty"},
+                // {60: "Sixty"},
+                // {70: "Seventy"},
+                // {80: "Eighty"},
+                // {90: "Ninety"}, 
                 {100: "Hundred"},
                 {1000: "Thousand"},
                 {1000000: "Million"},
             ];
-
-            list.forEach((decimal)=>{
-                const [key, value] = Object.entries(decimal)[0];
-                const composedLength = key.toString().length;
-                const numberLength = number.toString().length;
-                
-                if(composedLength === numberLength){
-                    const unit_decimal = unitDecimal(key[0]);
-                    console.log(key, value, number, composedLength, numberLength);
-                    result += `${unit_decimal} ${value}`;
+            
+            let res = "";
+            list.find((numClass)=>{
+                const [key, valueString] = Object.entries(numClass)[0];
+                const classifierLength = key.toString().length;
+                if(numLength === classifierLength){
+                    res = valueString;
+                    return valueString;
                 }
             });
-            return result;
+            return res;
         };
 
-
-        if(number <= 19){
-            this._number = unitDecimal(number);
-        } else {
-            this._number = composedNumbers(number);
-        }
+        numberArray.forEach((number, index, array)=>{
+            const pos = array.length - index;
+            this._number += ` ${classifyNumber(number)} ${classifyNumberPosition(pos)}`;
+        });
     }
 
     updateView() {
@@ -93,8 +80,7 @@ class NumberConverter {
     }
 }
 
-const numberConverter = new NumberConverter(0);
-
+const numberConverter = new NumberConverter();
 
 document.addEventListener("DOMContentLoaded", ()=>{
     numberConverter.updateView();
